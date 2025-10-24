@@ -25,6 +25,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+from pydantic import BaseModel
+
 class StockOut(BaseModel):
     id: int
     scrip: str
@@ -38,25 +40,17 @@ class StockOut(BaseModel):
     size: str | None = None
 
     class Config:
-        orm_mode = True
+        from_attributes = True  # Pydantic v2 ke liye
+
+
+
 
 class UserCreate(BaseModel):
     username: str
     email: str
     password: str
 
-class StockOut(BaseModel):
-    id: int
-    scrip: str
-    price: float
-    change: float
-    pct_change: float
-    market_cap: float
-    high_52w: float
-    low_52w: float
 
-    class Config:
-        orm_mode = True
 
 def get_db():
     db = SessionLocal()
@@ -83,6 +77,15 @@ def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depend
         raise HTTPException(status_code=401, detail="Invalid username or password")
     access_token = create_access_token(data={"sub": user.username})
     return {"access_token": access_token, "token_type": "bearer"}
+
+
+@app.get("/stocks", response_model=List[StockOut])
+def get_stocks(
+    limit: int = Query(20, ge=1, le=100),
+    offset: int = Query(0, ge=0),
+    db: Session = Depends(get_db)
+):
+    return db.query(Stock).order_by(Stock.id).offset(offset).limit(limit).all()
 
 @app.get("/dashboard")
 def dashboard(current_user: User = Depends(get_current_user)):
