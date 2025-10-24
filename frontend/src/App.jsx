@@ -6,7 +6,7 @@ import PrivateRoute from "./components/PrivateRoute";
 import Home from "./pages/Home";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
-import Dashboard from "./pages/Dashboard";
+import Dashboard from "./pages/DashboardPage";
 import Portfolio from "./pages/Portfolio";
 import Watchlist from "./pages/Watchlist";
 import TopMovers from "./pages/TopMovers";

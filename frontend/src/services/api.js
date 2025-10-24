@@ -1,4 +1,3 @@
-// src/services/api.js
 import axios from 'axios';
 
 const API_URL = "http://127.0.0.1:8000";
@@ -16,39 +15,32 @@ api.interceptors.request.use(config => {
   return config;
 });
 
-// Indices fetch karne ka function
+// ---- REALTIME STOCK DATA ----
+export const fetchRealtimeStock = async (symbol) => {
+  // symbol example: "TATAMOTORS.BSE" or "AAPL"
+  const res = await api.get(`/realtime_stock/${symbol}`);
+  return res.data;
+};
+
+// ---- DUMMY/DB DATA (old) ----
 export const fetchIndices = async () => {
   const res = await api.get('/indices');
   return res.data;
 };
 
-// Gainers fetch karne ka function
 export const fetchTopGainers = async (size = "Large", limit = 10) => {
   const res = await api.get('/top_gainers', { params: { size, limit } });
   return res.data;
 };
 
-// Losers fetch karne ka function
 export const fetchTopLosers = async (size = "Large", limit = 10) => {
   const res = await api.get('/top_losers', { params: { size, limit } });
   return res.data;
 };
 
-// Top by Market Cap fetch karne ka function
-export const fetchMarketCap = async (limit = 10) => {
-  const res = await api.get('/market_cap', { params: { limit } });
-  return res.data;
-};
-
-// Stocks paginated (agar purana bhi use ho raha hai)
-export const fetchStocks = async (limit = 20, offset = 0) => {
-  const res = await api.get('/stocks', { params: { limit, offset } });
-  return res.data;
-};
-
-// Aur endpoints bhi yahan add kar sakte ho
-// export const fetchPortfolio = ...
-// export const fetchWatchlist = ...
-// etc.
+// export const fetchMarketCap = async (limit = 10) => {
+//   const res = await api.get('/market_cap', { params: { limit } });
+//   return res.data;
+// };
 
 export default api;

@@ -7,3 +7,11 @@ SQLALCHEMY_DATABASE_URL = "mysql+pymysql://root:vivek%402502@localhost/tradify"
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
+
+# Dependency function to get DB session
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
