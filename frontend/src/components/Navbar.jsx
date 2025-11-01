@@ -1,23 +1,14 @@
 import React, { useContext, useState, useRef, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 
 export default function Navbar() {
-  const { isLoggedIn, setIsLoggedIn } = useContext(AuthContext);
+  const { isLoggedIn, setIsLoggedIn, user } = useContext(AuthContext);
   const [showDropdown, setShowDropdown] = useState(false);
   const dropdownRef = useRef();
   const navigate = useNavigate();
 
-  // Close dropdown when clicking outside
-  useEffect(() => {
-    function handleClickOutside(event) {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setShowDropdown(false);
-      }
-    }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+  // ...rest of your handler code (unchanged)...
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -25,13 +16,42 @@ export default function Navbar() {
     navigate("/");
   };
 
+  const handleLogoClick = () => {
+    if (isLoggedIn) {
+      navigate("/dashboard");
+    } else {
+      navigate("/");
+    }
+  };
+  useEffect(() => {
+  function handleClickOutside(event) {
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+      setShowDropdown(false);
+    }
+  }
+  document.addEventListener("mousedown", handleClickOutside);
+  return () => document.removeEventListener("mousedown", handleClickOutside);
+}, []);
+
+
+ 
+  const avatarUrl = user?.avatar || "https://img.icons8.com/ios-filled/50/4a90e2/line-chart.png";
+
+
   return (
-    <nav className="bg-white shadow flex items-center justify-between px-8 py-3">
+    <nav className="bg-white shadow flex items-center justify-between px-8 py-3"
+      style={{ margin: "10px auto",
+        maxWidth: 900,
+        marginLeft: "auto",
+        marginRight: "auto",
+        background: "#fff" }}
+    >
       {/* Logo */}
-      <Link to="/" className="flex items-center space-x-2">
-        {/* Stylish logo text */}
-        <span className="font-extrabold text-2xl text-transparent bg-clip-text bg-gradient-to-r from-teal-700 to-yellow-400 font-mono tracking-wide">Tradify</span>
-      </Link>
+      <span onClick={handleLogoClick} className="flex items-center space-x-2 cursor-pointer">
+        <span className="font-extrabold text-2xl text-transparent bg-clip-text bg-gradient-to-r from-teal-700 to-yellow-400 font-mono tracking-wide">
+          Tradify
+        </span>
+      </span>
 
       {/* Center: Search bar */}
       <div className="flex-1 flex justify-center px-4">
@@ -45,72 +65,63 @@ export default function Navbar() {
       {/* Right side */}
       <div className="relative flex items-center">
         {!isLoggedIn ? (
-          <Link to="/register" className="bg-green-500 hover:bg-green-700 text-white font-medium px-5 py-2 rounded transition">
+          <a href="/register" className="bg-green-500 hover:bg-green-700 text-white font-medium px-5 py-2 rounded transition">
             Login/Register
-          </Link>
+          </a>
         ) : (
           <>
-            {/* Profile Icon */}
             <button
               onClick={() => setShowDropdown((prev) => !prev)}
-              className="focus:outline-none"
-            >
-              {/* Example profile icon (you can replace with user avatar later) */}
-              <svg
-                className="w-8 h-8 text-teal-700 hover:text-yellow-400"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <circle cx="12" cy="8" r="4" strokeWidth="2"/>
-                <path d="M4 20c1.33-4 14.67-4 16 0" strokeWidth="2"/>
-              </svg>
+              className="focus:outline-none">
+              <img
+                src={avatarUrl}
+                alt="avatar"
+                className="w-9 h-9 rounded-full border-2 border-teal-100 shadow object-cover"
+              />
             </button>
-            {/* Dropdown */}
             {showDropdown && (
-              <div
-                ref={dropdownRef}
-                className="absolute right-0 mt-20 w-40 bg-white rounded shadow-lg ring-1 ring-black ring-opacity-5 z-10"
-              >
-                <Link
-                  to="/dashboard"
-                  className="block px-4 py-2 text-black hover:bg-gray-100 hover:text-teal-700"
-                  onClick={() => setShowDropdown(false)}
-                >
-                  Dashboard
-                </Link>
-                <Link
-                  to="/portfolio"
-                  className="block px-4 py-2 text-black hover:bg-gray-100 hover:text-teal-700"
-                  onClick={() => setShowDropdown(false)}
-                >
-                  Portfolio
-                </Link>
-                <Link
-                  to="/watchlist"
-                  className="block px-4 py-2 text-black hover:bg-gray-100 hover:text-teal-700"
-                  onClick={() => setShowDropdown(false)}
-                >
-                  Watchlist
-                </Link>
-                <Link
-                  to="/topmovers"
-                  className="block px-4 py-2 text-black hover:bg-gray-100 hover:text-teal-700"
-                  onClick={() => setShowDropdown(false)}
-                >
-                  Top Movers
-                </Link>
-                <button
-                  className="w-full text-left block px-4 py-2 text-red-600 hover:bg-gray-100 hover:text-yellow-400"
-                  onClick={() => {
-                    setShowDropdown(false);
-                    handleLogout();
-                  }}
-                >
-                  Logout
-                </button>
-              </div>
-            )}
+  <div
+    ref={dropdownRef}
+    style={{
+      position: "absolute",
+      top: "40px",        // Button ke bilkul neeche, required if avatar button ~40px
+      right: "0",         // Pura right aligned, search bar ke bhi right aligned hoga
+      width: "210px",     // Thoda chhota/compact
+      background: "#fff",
+      borderRadius: "12px",
+      boxShadow: "0 8px 20px 0 #22334422",
+      border: "1px solid #eef1f4",
+      padding: "10px 0",
+      zIndex: 40,
+      fontSize: "1.13em"  // Simple readable
+    }}
+  >
+    <button
+      onClick={() => { setShowDropdown(false); navigate("/portfolio"); }}
+      style={{ display: "flex", alignItems: "center", width: "100%", background: "none", border: "none", color: "#202020", padding: "12px 28px", cursor: "pointer", textAlign: "left" }}>
+      Portfolio
+    </button>
+    <button
+      onClick={() => { setShowDropdown(false); navigate("/watchlist"); }}
+      style={{ display: "flex", alignItems: "center", width: "100%", background: "none", border: "none", color: "#202020", padding: "12px 28px", cursor: "pointer", textAlign: "left" }}>
+      Watchlist
+    </button>
+    <button
+      onClick={() => { setShowDropdown(false); navigate("/topmovers"); }}
+      style={{ display: "flex", alignItems: "center", width: "100%", background: "none", border: "none", color: "#202020", padding: "12px 28px", cursor: "pointer", textAlign: "left" }}>
+      Top Movers
+    </button>
+    <div style={{
+      height: 1, background: "#f3f3f3", margin: "8px 0"
+    }}/>
+    <button 
+      onClick={() => { setShowDropdown(false); handleLogout(); }}
+      style={{ display: "flex", alignItems: "center", width: "100%", background: "none", border: "none", color: "#d7263d", padding: "12px 28px", cursor: "pointer", textAlign: "left" }}>
+      Log Out
+    </button>
+  </div>
+)}
+
           </>
         )}
       </div>

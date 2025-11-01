@@ -15,32 +15,33 @@ api.interceptors.request.use(config => {
   return config;
 });
 
-// ---- REALTIME STOCK DATA ----
-export const fetchRealtimeStock = async (symbol) => {
-  // symbol example: "TATAMOTORS.BSE" or "AAPL"
-  const res = await api.get(`/realtime_stock/${symbol}`);
-  return res.data;
-};
-
-// ---- DUMMY/DB DATA (old) ----
+// ---- INDICES ----
 export const fetchIndices = async () => {
   const res = await api.get('/indices');
   return res.data;
 };
 
-export const fetchTopGainers = async (size = "Large", limit = 10) => {
+// ---- TOP MOVERS ----
+export const fetchTopGainers = async (size = "large", limit = 10) => {
   const res = await api.get('/top_gainers', { params: { size, limit } });
   return res.data;
 };
 
-export const fetchTopLosers = async (size = "Large", limit = 10) => {
+export const fetchTopLosers = async (size = "large", limit = 10) => {
   const res = await api.get('/top_losers', { params: { size, limit } });
   return res.data;
 };
 
-// export const fetchMarketCap = async (limit = 10) => {
-//   const res = await api.get('/market_cap', { params: { limit } });
-//   return res.data;
-// };
+// ---- TOP MARKET CAP ----
+export const fetchMarketCap = async (limit = 10) => {
+  const res = await api.get('/top_market_cap', { params: { limit } });
+  return res.data;
+};
+
+// ---- USERNAME ----
+export const fetchUsername = async () => {
+  const res = await api.get('/me'); // Ya '/profile'
+  return res.data;
+};
 
 export default api;

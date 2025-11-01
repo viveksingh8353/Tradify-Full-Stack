@@ -1,31 +1,37 @@
-import React, { useEffect, useState } from 'react';
-import { fetchIndices, fetchTopGainers, fetchTopLosers, fetchMarketCap } from '../services/api';
-import Indices from '../components/Dashboard/Indices';
-import TopGainers from '../components/Dashboard/TopGainers';
-import TopLosers from '../components/Dashboard/TopLosers';
-// import MarketCap from '../components/Dashboard/MarketCap';
+import { useState, useEffect } from "react";
+import { fetchUsername } from "../services/api";
+import Indices from "../components/Indices";
+import TopGainers from "../components/TopGainers";
+import TopLosers from "../components/TopLosers";
+import TopMarketCap from "../components/TopMarketCap";
+// import Breadcrumb from "../components/Breadcrumb"; // Optional
 
-const DashboardPage = () => {
-  const [indices, setIndices] = useState([]);
-  const [gainers, setGainers] = useState([]);
-  const [losers, setLosers] = useState([]);
-  const [marketCap, setMarketCap] = useState([]);
+export default function DashboardPage() {
+  const [username, setUsername] = useState("");
 
   useEffect(() => {
-    fetchIndices().then(setIndices);
-    fetchTopGainers().then(setGainers);
-    fetchTopLosers().then(setLosers);
-    fetchMarketCap().then(setMarketCap);
+    fetchUsername().then(res => setUsername(res.username));
   }, []);
 
   return (
-    <div className="p-5 bg-gray-50 min-h-screen">
-      <Indices data={indices} />
-      <TopGainers data={gainers} />
-      <TopLosers data={losers} />
-      {/* <MarketCap data={marketCap} /> */}
+    <div style={{
+      maxWidth: "1200px",
+      margin: "0 auto",
+      padding: "0 32px"
+    }}>
+      {/* <Breadcrumb /> */}
+      <h2 style={{ margin: "10px auto",
+        maxWidth: 900,
+        marginLeft: "auto",
+        marginRight: "auto",
+        background: "#fff" }}
+    >
+        Welcome back, <span style={{ color: "#11786c", fontWeight: 600 }}>{username || "User"}!</span>
+      </h2>
+      <Indices />
+      <TopGainers />
+      <TopLosers />
+      <TopMarketCap />
     </div>
   );
-};
-
-export default DashboardPage;
+}

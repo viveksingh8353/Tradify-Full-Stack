@@ -8,8 +8,10 @@ from fastapi.security import OAuth2PasswordRequestForm
 from fastapi.middleware.cors import CORSMiddleware
 from typing import List
 from seed_stocks import SessionLocal;
-from routers import user_routes, stock_routes, topmovers_routes
-from routers import realtime_routes 
+# from routers import user_routes, stock_routes, topmovers_routes
+# from routers import realtime_routes 
+from routers import indices, topmovers, marketcap
+
 
 Base.metadata.create_all(bind=engine)
 
@@ -26,6 +28,25 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+API_KEY = "YOUR_ALPHA_VANTAGE_KEY"
+BASE_URL = "https://www.alphavantage.co/query"
+
+@app.get("/stocks/{symbol}")
+async def get_stock_data(symbol: str):
+    params = {
+        "function": "GLOBAL_QUOTE",
+        "symbol": symbol,
+        "apikey": API_KEY
+    }
+    async with httpx.AsyncClient() as client:
+        resp = await client.get(BASE_URL, params=params)
+    if resp.status_code != 200:
+        raise HTTPException(status_code=500, detail="Failed to get data")
+    data = resp.json().get("Global Quote")
+    if not data:
+        raise HTTPException(status_code=404, detail="No data found")
+    return data
 
 class StockOut(BaseModel):
     id: int
@@ -79,7 +100,12 @@ def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depend
     return {"access_token": access_token, "token_type": "bearer"}
 
 
-app.include_router(user_routes.router)
+# app.include_router(user_routes.router)
 # app.include_router(stock_routes.router)
-app.include_router(topmovers_routes.router)
-app.include_router(realtime_routes.router) 
+# app.include_router(topmovers_routes.router)
+# app.include_router(realtime_routes.router) 
+
+app.include_router(indices.router)
+app.include_router(topmovers.router)
+app.include_router(marketcap.router)
+
