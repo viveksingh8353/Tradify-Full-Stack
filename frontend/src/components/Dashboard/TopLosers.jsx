@@ -1,6 +1,6 @@
 // src/components/TopLosers.jsx
 import { useEffect, useState } from "react";
-import { fetchTopLosers } from "../services/api";
+import { fetchTopLosers } from "../../services/api";
 import { useNavigate } from "react-router-dom";
 
 export default function TopLosers() {

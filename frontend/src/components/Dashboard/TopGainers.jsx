@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { fetchTopGainers } from "../services/api";
+import { fetchTopGainers } from "../../services/api";
 import { useNavigate } from "react-router-dom";
 
 export default function TopGainers() {

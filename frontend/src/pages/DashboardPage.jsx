@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import { fetchUsername } from "../services/api";
-import Indices from "../components/Indices";
-import TopGainers from "../components/TopGainers";
-import TopLosers from "../components/TopLosers";
-import TopMarketCap from "../components/TopMarketCap";
+import Indices from "../components/Dashboard/Indices";
+import TopGainers from "../components/Dashboard/TopGainers";
+import TopLosers from "../components/Dashboard/TopLosers";
+import TopMarketCap from "../components/Dashboard/TopMarketCap";
 // import Breadcrumb from "../components/Breadcrumb"; // Optional
 
 export default function DashboardPage() {

@@ -1,6 +1,6 @@
 // src/components/Indices.jsx
 import { useEffect, useState } from "react";
-import { fetchIndices } from "../services/api"; // apne actual path ke hisab se
+import { fetchIndices } from "../../services/api"; // apne actual path ke hisab se
 
 export default function Indices() {
   const [indices, setIndices] = useState([]);

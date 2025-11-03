@@ -1,6 +1,6 @@
 // src/components/TopMarketCap.jsx
 import { useEffect, useState } from "react";
-import { fetchMarketCap } from "../services/api";
+import { fetchMarketCap } from "../../services/api";
 
 export default function TopMarketCap() {
   const [records, setRecords] = useState([]);
