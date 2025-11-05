@@ -5,12 +5,12 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import PrivateRoute from "./components/PrivateRoute";
 import Home from "./pages/Home";
-import Register from "./pages/Register";
-import Login from "./pages/Login";
-import Dashboard from "./pages/DashboardPage";
-import Portfolio from "./pages/Portfolio";
-import Watchlist from "./pages/Watchlist";
-import TopMoversPage from "./pages/TopMoversPage";
+import RegisterPage from "./pages/register/RegisterPage";
+import LoginPage from "./pages/Login/LoginPage";
+import DashboardPage from "./pages/dashboard/DashboardPage";
+import PortfolioPage from "./pages/portfolio/PortfolioPage";
+import WatchlistPage from "./pages/watchlist/WatchlistPage";
+import TopMoversPage from "./pages/TopMovers/TopMoversPage";
 
 function App() {
   return (
@@ -19,8 +19,8 @@ function App() {
         <Navbar />
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<RegisterPage />} />
+          <Route path="/login" element={<LoginPage />} />
 
           {/* Protected routes */}
           <Route
@@ -28,7 +28,7 @@ function App() {
             element={
               <MainLayout>
               <PrivateRoute>
-                <Dashboard />
+                <DashboardPage />
               </PrivateRoute>
               </MainLayout>
             }
@@ -38,7 +38,7 @@ function App() {
             element={
               <MainLayout>
               <PrivateRoute>
-                <Portfolio />
+                <PortfolioPage />
               </PrivateRoute>
               </MainLayout>
             }
@@ -48,7 +48,7 @@ function App() {
             element={
               <MainLayout>
               <PrivateRoute>
-                <Watchlist />
+                <WatchlistPage />
               </PrivateRoute>
               </MainLayout>
             }

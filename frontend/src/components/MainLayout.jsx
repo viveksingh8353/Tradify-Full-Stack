@@ -1,12 +1,11 @@
-// src/components/MainLayout.jsx
-import Breadcrumb from "./Breadcrumb";
+import Breadcrumb from "../pages/dashboard/components/Breadcrumb";
 
 export default function MainLayout({ children }) {
   return (
-    <div style={{
-      maxWidth: 1100, margin: "0 auto", padding: "0 32px"
-    }}>
-      <Breadcrumb />
+    <div className="max-w-[1100px] mx-auto px-6">
+      <div className="py-4">
+        <Breadcrumb />
+      </div>
       {children}
     </div>
   );

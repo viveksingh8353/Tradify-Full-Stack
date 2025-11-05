@@ -1,5 +1,22 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr
 from typing import Optional
+
+
+
+class UserCreate(BaseModel):
+    username: str
+    email: EmailStr
+    password: str
+
+
+class UserOut(BaseModel):
+    id: int
+    username: str
+    email: str
+
+    class Config:
+        from_attributes = True  
+
 
 class StockOut(BaseModel):
     id: int
@@ -14,4 +31,4 @@ class StockOut(BaseModel):
     size: Optional[str] = None
 
     class Config:
-        orm_mode = True
+        from_attributes = True 
